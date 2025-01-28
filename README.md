@@ -25,14 +25,14 @@ Online Store is an **ASP.NET Core MVC** e-commerce project developed in **Visual
 ## 📸 Screenshots
 Below are screenshots illustrating key functionalities:
 1. **🔔 Notifications for price drops on favorite products**
-   ![Notifications](Screenshot(74).png)
+   ![Notifications](Screenshot (74).png)
 2. **🏠 Homepage with best-selling products and recently viewed items**
-   ![Homepage](Screenshot(71).png)
+   ![Homepage](Screenshot (71).png)
 3. **📄 Product details page** (price, reviews, specifications, add to favorites)
-   ![Product Actions](Screenshot(72).png)
-   ![Product Details&Reviews](Screenshot(73).png)
+   ![Product Actions](Screenshot (72).png)
+   ![Product Details&Reviews](Screenshot (73).png)
 4. **⚙️ Category and attribute management**
-   ![Category Management](Screenshot(75).png)
+   ![Category Management](Screenshot (75).png)
    ![Subcategory Management](Screenshot(76).png)
 
 ---
