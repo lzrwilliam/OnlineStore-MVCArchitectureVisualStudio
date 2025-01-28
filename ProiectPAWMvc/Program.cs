@@ -15,7 +15,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, CustomRoleProvider>(); // a
 
 
 builder.Services.AddDbContext<ProdusContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("MagazinOnline1")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("MagazinOnline1"))); // nu umblam aici MagazinOnline1 estr string-ul definit in appsettings.json care contine calea catre baza de date
 //dependency injection pt a folozi baza de date si pentru a o updata cand facem add migration si update database
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
