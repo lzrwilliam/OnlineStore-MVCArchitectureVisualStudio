@@ -1,0 +1,157 @@
+﻿@model ProiectPAWMvc.Models.CategorieDetaliiViewModel
+
+<div class="container">
+    <h1>@Model.CategorieNume</h1>
+
+    <!-- subcategorii -->
+    @if (Model.Subcategorii != null && Model.Subcategorii.Any())
+    {
+        <h2>Subcategorii</h2>
+        <div class="list-group mb-4">
+            @foreach (var subcategorie in Model.Subcategorii)
+            {
+                <a asp-action="Detalii" asp-route-id="@subcategorie.ID" class="list-group-item">
+                    @subcategorie.Nume
+                </a>
+            }
+        </div>
+    }
+
+    <!-- filtre -->
+    <h2>Filtre</h2>
+    <form asp-action="Detalii" method="get">
+        <input type="hidden" name="id" value="@Model.CategorieID" />
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="minPrice">Preț Minim</label>
+                <input type="number" step="0.01" class="form-control" id="minPrice" name="minPrice" value="@Model.MinPrice" />
+            </div>
+            <div class="col-md-4">
+                <label for="maxPrice">Preț Maxim</label>
+                <input type="number" step="0.01" class="form-control" id="maxPrice" name="maxPrice" value="@Model.MaxPrice" />
+            </div>
+            <div class="col-md-4">
+                <label for="brand">Brand</label>
+                <input type="text" class="form-control" id="brand" name="brand" value="@Model.Brand" />
+            </div>
+            @foreach (var atribut in Model.AtributeDinamice)
+            {
+                <div class="form-group">
+                    <label>@atribut.Nume</label>
+                    @if (atribut.Tip == "number")
+                    {
+                        <input type="number" class="form-control" placeholder="Min Value" asp-for="@atribut.ValoareMinima" />
+                        <input type="number" class="form-control" placeholder="Max Value" asp-for="@atribut.ValoareMaxima" />
+                    }
+                    else if (atribut.Tip == "boolean")
+                    {
+                        <select asp-for="@atribut.ValoareCurenta" class="form-control">
+                            <option value="">Alege</option>
+                            <option value="true">Da</option>
+                            <option value="false">Nu</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" asp-for="@atribut.ValoareCurenta" />
+                    }
+                </div>
+            }
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Aplică Filtre</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Afisarea produselor -->
+    <h2>Produse</h2>
+    <div class="row">
+        @foreach (var produs in Model.Produse)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="~/src/@produs.Poza" class="card-img-top img-fit-cover" alt="@produs.Nume">
+                    <div class="card-body">
+                        <h5 class="card-title">@produs.Nume</h5>
+                        <p class="card-text">@produs.Descriere</p>
+                        <p class="card-text"><strong>Pret:</strong> @produs.Pret</p>
+                        <p class="card-text"><strong>Stoc:</strong> @produs.Stoc</p>
+                        <p class="card-text"><strong>Brand:</strong> @produs.Brand</p>
+                        @foreach (var valoare in produs.ValoriAtribute)
+                        {
+                            <p><strong>@valoare.AtributCategorie.Nume:</strong> @valoare.Valoare</p>
+                        }
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a asp-action="Detalii" asp-controller="Produs" asp-route-prodID="@produs.ID" class="btn btn-primary">View Details</a>
+                            <button class="btn btn-link favorite-btn" data-id="@produs.ID">
+                                @if (Model.FavoriteIds.Contains(produs.ID))
+                                {
+                                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path class="heart-filled" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                                    </svg>
+                                }
+                                else
+                                {
+                                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path class="heart-outline" d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zM12 19.29l-.45-.39C6.4 14.36 4 11.28 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5 18.5 5 20 6.5 20 8.5c0 2.78-2.4 5.86-7.55 10.39L12 19.29z"></path>
+                                    </svg>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+    <div>
+        Page @(Model.Produse.PageNumber) of @(Model.Produse.PageCount)
+
+        @if (Model.Produse.HasPreviousPage)
+        {
+            <a asp-action="Detalii" asp-route-id="@Model.CategorieID" asp-route-pageNumber="@(Model.Produse.PageNumber - 1)">Previous</a>
+        }
+        @if (Model.Produse.HasNextPage)
+        {
+            <a asp-action="Detalii" asp-route-id="@Model.CategorieID" asp-route-pageNumber="@(Model.Produse.PageNumber + 1)">Next</a>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.favorite-btn').click(function () {
+                var button = $(this);
+                var produsId = button.data('id');
+                var isFavorite = button.find('.heart-filled').length > 0;
+
+                $.ajax({
+                    url: isFavorite ? '@Url.Action("EliminaDinFavorite", "Produs")' : '@Url.Action("AdaugaLaFavorite", "Produs")',
+                    type: 'POST',
+                    data: { produsId: produsId },
+                    success: function (response) {
+                        if (isFavorite) {
+                            button.find('svg').html('<path class="heart-outline" d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zM12 19.29l-.45-.39C6.4 14.36 4 11.28 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5 18.5 5 20 6.5 20 8.5c0 2.78-2.4 5.86-7.55 10.39L12 19.29z"></path>');
+                        } else {
+                            button.find('svg').html('<path class="heart-filled" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error:', error);
+                        alert('Eroare la actualizarea favoritului.');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+@functions {
+    private string GetQueryValue(string key)
+    {
+        return ViewContext.HttpContext.Request.Query[key].ToString();
+    }
+}

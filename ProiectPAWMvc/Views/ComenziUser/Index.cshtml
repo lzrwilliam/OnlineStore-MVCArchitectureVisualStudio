@@ -1,0 +1,25 @@
+﻿@model IEnumerable<ProiectPAWMvc.Models.Comanda>
+
+<h2>Comenzile Mele</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Data Comanda</th>
+            <th>Total Comanda</th>
+            <th>Detalii</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var comanda in Model)
+        {
+            <tr>
+                <td>@comanda.DataComanda.ToString("dd/MM/yyyy")</td>
+                <td>@comanda.TotalComanda.ToString("C")</td>
+                <td>
+                    <a asp-action="Detalii" asp-route-id="@comanda.ID" class="btn btn-primary">Vezi Detalii</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

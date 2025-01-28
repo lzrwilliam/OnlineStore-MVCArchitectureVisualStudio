@@ -1,0 +1,52 @@
+﻿@model ProiectPAWMvc.Controllers.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+<div class="container">
+    <h1 class="my-4">Cele mai vandute produse</h1>
+    @foreach (var categoryData in Model.MostSoldProductsByCategory)
+    {
+        <h2>@categoryData.Category.Nume</h2>
+        <div class="row">
+            @foreach (var produs in categoryData.TopProducts)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="~/src/@produs.Poza" class="card-img-top img-fit-cover" alt="@produs.Nume">
+                        <div class="card-body">
+                            <h5 class="card-title">@produs.Nume</h5>
+                            <p class="card-text">@produs.Descriere</p>
+                            <p class="card-text"><strong>Pret:</strong> @produs.Pret</p>
+                            <a href="@Url.Action("Detalii", "Produs", new { prodID = produs.ID })" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.LastViewedProducts.Any())
+    {
+        <h1 class="my-4">Ultimele produse vizualizate</h1>
+        <div class="row">
+            @foreach (var produs in Model.LastViewedProducts)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="~/src/@produs.Poza" class="card-img-top img-fit-cover" alt="@produs.Nume">
+                        <div class="card-body">
+                            <h5 class="card-title">@produs.Nume</h5>
+                            <p class="card-text">@produs.Descriere</p>
+                            <p class="card-text"><strong>Pret:</strong> @produs.Pret</p>
+                            <a href="@Url.Action("Detalii", "Produs", new { prodID = produs.ID })" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

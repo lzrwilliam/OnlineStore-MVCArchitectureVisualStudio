@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ProiectPAW.wwwroot.Models.Categorie>
+
+<div class="sidebar">
+    <aside>
+    <h3 class="my-4">Categorii</h3>
+    <div class="list-group">
+        @foreach (var categorie in Model.Where(c => c.ParentCategorieID == null))
+        {
+            <a class="list-group-item" data-bs-toggle="collapse" href="#collapse-@categorie.ID" role="button" aria-expanded="false" aria-controls="collapse-@categorie.ID">
+                @categorie.Nume
+            </a>
+            <div class="collapse" id="collapse-@categorie.ID">
+                @foreach (var subcategorie in categorie.Subcategorii)
+                {
+                    <a asp-controller="Categorie" asp-action="Detalii" asp-route-id="@subcategorie.ID" class="list-group-item ms-3">@subcategorie.Nume</a>
+                }
+            </div>
+        }
+
+        </div>
+    </aside>
+</div>

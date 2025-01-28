@@ -1,0 +1,108 @@
+﻿/* stilizare de baza pt meniu categorii */
+.sidebar {
+    background-color: #f9f9f9; 
+    border-right: 1px solid #eee; 
+    padding: 20px;
+    color: #333; 
+}
+
+/* Titluri de sectiune */
+.sidebar h3 {
+    font-size: 20px;
+    color: #444; 
+    margin-bottom: 15px;
+}
+
+/*  lista categorii */
+.sidebar .list-group-item {
+    background-color: transparent; 
+    border: none; 
+    padding: 10px 20px; 
+    color: #555; 
+    border-bottom: 1px solid #e7e7e7; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+/* Hover și focus pentru itemi */
+.sidebar .list-group-item:hover, .sidebar .list-group-item:focus {
+    background-color: #e7e7e7; 
+    color: #333; 
+    cursor: pointer; 
+}
+
+/*  pentru sub-categorii */
+.sidebar .collapse .list-group-item {
+    padding-left: 30px; 
+}
+
+/* Meniu extensibil */
+.collapse {
+    border-top: 1px solid #eee; /* Linie de separare */
+}
+
+
+
+/* Butonul de favorite */
+.favorite-btn {
+    color: #ffca2c; 
+    cursor: pointer;
+}
+
+.favorite-btn .fa-heart {
+    color: red;
+}
+
+.favorite-btn .fa-heart-o {
+    color: #bbb; /* Gri pentru inimi neumplute */
+}
+
+   /*inimi de favorite in pagina detalii la categorie view*/
+.heart-icon {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.heart-outline {
+    stroke: gray;
+    fill: none;
+}
+
+.heart-filled {
+    fill: red;
+    stroke: none;
+}
+
+.moderator-menu {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+    .moderator-menu .moderator-submenu {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .moderator-menu .moderator-submenu a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .moderator-menu .moderator-submenu a:hover {
+                background-color: #f1f1f1;
+            }
+
+    .moderator-menu:hover .moderator-submenu {
+        display: block;
+    }
+

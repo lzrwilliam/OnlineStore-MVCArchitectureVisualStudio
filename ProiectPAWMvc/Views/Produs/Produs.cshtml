@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ProiectPAW.wwwroot.Models.Produs>
+
+@{
+    ViewData["Title"] = "Produse";
+}
+
+<h1>Produse</h1>
+
+<div class="row">
+    @foreach (var produs in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="~/src/@(produs.Poza ?? "ProdNoPicture.png")" class="card-img-top" alt="@produs.Nume">
+                <div class="card-body">
+                    <h5 class="card-title">@produs.Nume</h5>
+                    <p class="card-text">@produs.Descriere</p>
+                    <p class="card-text"><strong>Pret:</strong> @produs.Pret</p>
+                    <p class="card-text"><strong>Stoc:</strong> @produs.Stoc</p>
+                    <a asp-action="Detalii" asp-route-prodID="@produs.ID" class="btn btn-primary">Detalii</a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (produs.Stoc > 0)
+                        {
+                            <a asp-action="AdaugaInCos" asp-route-produsId="@produs.ID" class="btn btn-success">Adaugă în coș</a>
+                        }
+                        else
+                        {
+                            <span class="text-danger">STOC TERMINAT</span>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

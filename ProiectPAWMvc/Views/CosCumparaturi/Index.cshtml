@@ -1,0 +1,68 @@
+﻿@model IEnumerable<ProiectPAW.Models.CosCumparaturi>
+
+@{
+    ViewData["Title"] = "Coș de cumpărături";
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<h1>Coș de cumpărături</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Produs</th>
+            <th>Preț</th>
+            <th>Cantitate</th>
+            <th>Total</th>
+            <th>Acțiuni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Produs.Nume</td>
+                <td>@item.Produs.Pret</td>
+                <td>
+                    <form asp-action="DecrementaCantitate" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@item.ID" />
+                        <button type="submit" class="btn btn-sm btn-secondary">-</button>
+                    </form>
+                    @item.Cantitate
+                    <form asp-action="IncrementaCantitate" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@item.ID" />
+                        <button type="submit" class="btn btn-sm btn-secondary">+</button>
+                    </form>
+                </td>
+                <td>@(item.Produs.Pret * item.Cantitate)</td>
+                <td>
+                    @if (item.Produs.Stoc > 0)
+                    {
+                        <a asp-action="StergeDinCos" asp-route-id="@item.ID" class="btn btn-danger">Șterge</a>
+                    }
+                    else
+                    {
+                        <a asp-action="StergeDinCos" asp-route-id="@item.ID" class="btn btn-danger">Șterge</a>
+
+                        <span class="text-danger">STOC TERMINAT</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="#" class="btn btn-success" onclick="confirmPlasareComanda()">Plătește</a>
+
+<script>
+    function confirmPlasareComanda() {
+        if (confirm('Sigur doriți să plasați comanda?')) {
+            window.location.href = '@Url.Action("Plateste", "CosCumparaturi")';
+        }
+    }
+</script>

@@ -1,0 +1,108 @@
+/*  stilizare generale pt sectiuniea produse*/
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Headings style */
+h1, h2 {
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* card-uri produse stilizare */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover; 
+}
+
+.card-body {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.card-text {
+    font-size: 16px;
+    color: #666;
+    flex-grow: 1;
+}
+
+
+.btn-primary {
+    background-color: #0071dc;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Butonul de favorite */
+.favorite-btn {
+    color: #ffca2c;
+    cursor: pointer;
+}
+
+.favorite-btn .fa-heart {
+    color: red;
+}
+
+.favorite-btn .fa-heart-o {
+    color: #bbb; /* Gri pentru inimioare neumplute */
+}
+
+@media (max-width: 768px) {
+    .card-body {
+        padding: 10px;
+    }
+
+    .card-title {
+        font-size: 16px;
+    }
+
+    .card-text {
+        font-size: 14px;
+    }
+
+    .card-img-top {
+        height: 150px;
+    }
+}
+
+.dynamic-attributes h4 {
+    margin-top: 20px;
+    color: #0056b3;
+}
+
+.dynamic-attributes p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+}
+.img-fit-cover {
+    width: 100%; 
+    height: 200px; 
+    object-fit: contain; /* redimensioneaza imaginea ca sa fie vizibila complet */
+    object-position: center; 
+}

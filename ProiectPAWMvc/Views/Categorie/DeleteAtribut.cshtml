@@ -1,0 +1,30 @@
+﻿@model ProiectPAW.wwwroot.Models.AtributCategorie
+
+@{
+    ViewData["Title"] = "Șterge Atribut";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>Esti sigur ca vrei sa stergi acest atribut?</h3>
+
+<div>
+    <h4>@Model.Nume</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Tip)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tip)
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteAtribut">
+        <input type="hidden" asp-for="ID" />
+        <div class="form-group">
+            <input type="submit" value="Șterge" class="btn btn-danger" /> |
+            <a asp-action="Edit" asp-route-id="@Model.CategorieID" class="btn btn-secondary">Anuleaza</a>
+        </div>
+    </form>
+</div>

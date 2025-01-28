@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ProiectPAW.wwwroot.Models.Produs>
+
+@{
+    ViewBag.Title = "Lista Produse";
+    string actionType = ViewBag.ActionType as string;
+
+ @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+   
+}
+
+<div class="container">
+    <h1>Lista Produse</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nume</th>
+                <th>Descriere</th>
+                <th>Pret</th>
+                <th>Stoc</th>
+                <th>Brand</th>
+                <th>Categorie</th>
+                <th>Subcategorie</th>
+                <th>Acțiune</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var produs in Model)
+            {
+                <tr>
+                    <td>@produs.Nume</td>
+                    <td>@produs.Descriere</td>
+                    <td>@produs.Pret</td>
+                    <td>@produs.Stoc</td>
+                    <td>@produs.Brand</td>
+                    <td>@produs.Categorie?.Nume</td>
+                    <td>@produs.Subcategorie?.Nume</td>
+                    <td>
+                        @if (actionType == "modifica")
+                        {
+                            <a asp-action="ModificaProdus" asp-route-produsId="@produs.ID" class="btn btn-warning">Modifică</a>
+                        }
+                        else if (actionType == "sterge")
+                        {
+                            <form method="post" asp-action="StergeProdus" asp-route-produsId="@produs.ID" class="d-inline">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Ești sigur că vrei să ștergi acest produs?')">Șterge</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

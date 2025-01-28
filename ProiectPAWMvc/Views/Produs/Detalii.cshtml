@@ -1,0 +1,222 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ProiectPAW.wwwroot.Models.Produs
+
+<div class="container product-details">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    <div class="row">
+        <div class="col-md-8">
+            <div class="product-header mb-3">
+                <h1>@Model.Nume</h1>
+                <img src="~/src/@Model.Poza" class="img-fluid rounded shadow-sm" alt="@Model.Nume" />
+            </div>
+            <div class="product-info mb-3">
+                <h3>Detalii produs</h3>
+                <p><strong>Descriere:</strong> @Model.Descriere</p>
+                <p><strong>Pret:</strong> @Model.Pret <span class="text-muted">RON</span></p>
+                <p><strong>Stoc:</strong> @Model.Stoc</p>
+                <p><strong>Brand:</strong> @Model.Brand</p>
+                <p><strong>Categorie:</strong> @Model.Categorie?.Nume</p>
+                <p><strong>Subcategorie:</strong> @Model.Subcategorie?.Nume</p>
+            </div>
+            <div class="atribute-dinamice mb-3">
+                <h4>Caracteristici Specifice</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Caracteristica</th>
+                                <th>Valoare</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Categorie != null && Model.Categorie.Atribute != null)
+                            {
+                                foreach (var atribut in Model.Categorie.Atribute)
+                                {
+                                    var valoareAtribut = Model.ValoriAtribute.FirstOrDefault(va => va.AtributCategorieID == atribut.ID);
+                                    <tr>
+                                        <td>@atribut.Nume</td>
+                                        <td>@(valoareAtribut != null ? valoareAtribut.Valoare : "N/A")</td>
+                                    </tr>
+                                }
+                            }
+                            @if (Model.Subcategorie != null && Model.Subcategorie.Atribute != null)
+                            {
+                                foreach (var atribut in Model.Subcategorie.Atribute)
+                                {
+                                    var valoareAtribut = Model.ValoriAtribute.FirstOrDefault(va => va.AtributCategorieID == atribut.ID);
+                                    <tr>
+                                        <td>@atribut.Nume</td>
+                                        <td>@(valoareAtribut != null ? valoareAtribut.Valoare : "N/A")</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="actions mb-3">
+                @if (User.Identity.IsAuthenticated)
+                {
+                   
+                    if (Model.Stoc > 0)
+                    {
+                        <form asp-action="AdaugaInCos" asp-controller="CosCumparaturi" method="get">
+                            <input type="hidden" name="produsId" value="@Model.ID" />
+                            <div class="form-group mb-2">
+                                <label for="cantitate" class="sr-only">Cantitate</label>
+                                <input type="number" class="form-control" id="cantitate" name="cantitate" value="1" min="1" max="@Model.Stoc" />
+                                <span class="stock-info">@Model.Stoc bucati disponibile in stoc</span>
+                            </div>
+                            <button type="submit" class="btn btn-success">Adaugă în coș</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">STOC TERMINAT</span>
+                    }
+                }
+            </div>
+            <div class="favorite-section mb-3">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    if (Model.Favorite.Any(f => f.UtilizatorID == int.Parse(User.FindFirst("IdUserLogat").Value)))
+                    {
+                        <form asp-action="EliminaDinFavorite" method="post">
+                            <input type="hidden" name="produsId" value="@Model.ID" />
+                            <button type="submit" class="btn btn-warning"><i class="fa fa-heart-broken"></i> Elimina din favorite</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="AdaugaLaFavorite" method="post">
+                            <input type="hidden" name="produsId" value="@Model.ID" />
+                            <button type="submit" class="btn btn-outline-danger"><i class="fa fa-heart"></i> Adaugă la favorite</button>
+                        </form>
+                    }
+                }
+            </div>
+          
+          
+            <div class="mt-4">
+                @if (User.IsInRole("Moderator"))
+                {
+                <button type="button" onclick="location.href='@Url.Action("ModificaProdus", new { produsId = Model.ID })'" class="btn btn-modify">
+                    <i class="fa fa-cog"></i> Modifică
+                </button>
+                <form method="post" action="@Url.Action("stergeProdus", new { produsId = Model.ID })" class="d-inline">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Esti sigur ca vrei sa stergi acest produs?')">
+                        <i class="fa fa-trash"></i> Sterge
+                        </button>
+                </form>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-md-12">
+        <h3>Recenzii</h3>
+        @if (User.Identity.IsAuthenticated && ViewBag.HasPurchased)
+        {
+            <div id="review-section" class="mb-4">
+                <h4>@(ViewBag.HasReviewed ? "Modifică recenzia" : "Adaugă o recenzie")</h4>
+                <form asp-action="@(ViewBag.HasReviewed ? "ModificaRecenzie" : "AdaugaRecenzie")" method="post">
+                    <input type="hidden" name="produsId" value="@Model.ID" />
+                    <div class="form-group mb-3">
+                        <label for="textRecenzie">Comentariu</label>
+                        <textarea name="textRecenzie" class="form-control" rows="3" required>@(ViewBag.HasReviewed ? ViewBag.UserReview.TextRecenzie : "")</textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="evaluare">Rating</label>
+                        <div id="rating" class="rating">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <input type="radio" name="evaluare" value="@i" id="star-@i" @(ViewBag.HasReviewed && ViewBag.UserReview.Evaluare == i ? "checked" : "") hidden />
+                                <label for="star-@i" class="star">&#9733;</label>
+                            }
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">@(ViewBag.HasReviewed ? "Modifică Recenzie" : "Adaugă Recenzie")</button>
+                </form>
+            </div>
+        }
+
+        <div id="reviews">
+            @foreach (var review in Model.Recenzii)
+            {
+                <div class="review mb-3">
+                    <h5>@review.Utilizator.Nume</h5>
+                    <p>@review.TextRecenzie</p>
+                    <div class="rating">
+                        @for (int i = 1; i <= review.Evaluare; i++)
+                        {
+                            <span class="star filled">&#9733;</span>
+                        }
+                        @for (int i = review.Evaluare + 1; i <= 5; i++)
+                        {
+                            <span class="star">&#9734;</span>
+                        }
+                    </div>
+                    <small class="text-muted">@review.DataRecenzie.ToShortDateString()</small>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+
+            const ratingInputs = document.querySelectorAll('.rating input');
+            const ratingLabels = document.querySelectorAll('.rating label');
+
+            function updateStars() {
+                let checked = document.querySelector('.rating input:checked');
+                let checkedValue = checked ? parseInt(checked.value, 10) : 0;
+                ratingLabels.forEach((label, idx) => {
+                    label.style.color = (idx < checkedValue) ? '#ffc700' : '#ccc';
+                });
+            }
+
+            ratingInputs.forEach(input => {
+                input.addEventListener('change', updateStars);
+                input.addEventListener('mouseover', function () {
+                    let value = parseInt(input.value, 10);
+                    ratingLabels.forEach((label, idx) => {
+                        label.style.color = (idx < value) ? '#ffc700' : '#ccc';
+                    });
+                });
+                input.addEventListener('mouseout', updateStars);
+            });
+
+            updateStars(); 
+               
+
+            var editButtons = document.querySelectorAll('.edit-review');
+            editButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var reviewId = this.dataset.reviewId;
+                });
+            });
+        });
+
+    
+
+    </script>
+}

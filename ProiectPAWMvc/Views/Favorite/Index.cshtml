@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ProiectPAW.wwwroot.Models.Produs>
+
+@{
+    ViewData["Title"] = "Produse Favorite";
+}
+
+<div class="container">
+    <h1>Produse Favorite</h1>
+    <div class="row">
+        @foreach (var produs in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="~/src/@produs.Poza" class="card-img-top img-fit-cover" alt="@produs.Nume">
+                    <div class="card-body">
+                        <h5 class="card-title">@produs.Nume</h5>
+                        <p class="card-text">@produs.Descriere</p>
+                        <p class="card-text"><strong>Preț:</strong> @produs.Pret</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="@Url.Action("Detalii", "Produs", new { prodID = produs.ID })" class="btn btn-primary">View Details</a>
+                            <form asp-action="EliminaDinFavorite" method="post" class="ml-2">
+                                <input type="hidden" name="produsId" value="@produs.ID" />
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

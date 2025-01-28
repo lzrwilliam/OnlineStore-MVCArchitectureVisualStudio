@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ProiectPAWMvc.Models.Notificare>
+
+@{
+    ViewData["Title"] = "Notificari";
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+<h1>Notificări</h1>
+
+@if (!Model.Any())
+{
+    <p>Nu exista notificari.</p>
+}
+else
+{
+    <div class="notificari-list">
+        @foreach (var notificare in Model)
+        {
+            <div class="notificare-card @(notificare.Citita ? "citita" : "necita")">
+                <div class="notificare-content">
+                    <div class="notificare-header">
+                        <h5>@notificare.Produs.Nume</h5>
+                        <small>@notificare.DataNotificare.ToShortDateString()</small>
+                    </div>
+                    <div class="notificare-body">
+                        <p>Preț vechi: <strong>@notificare.PretVechi</strong> lei</p>
+                        <p>Preț nou: <strong>@notificare.PretNou</strong> lei</p>
+                    </div>
+                    <div class="notificare-actions">
+                        <form asp-action="MarcheazaCaCitit" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@notificare.ID" />
+                            <button type="submit" class="btn btn-success btn-sm">Marchează ca citită</button>
+                        </form>
+                        <form asp-action="StergeNotificare" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@notificare.ID" />
+                            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Șterge</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<style>
+    .notificari-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .notificare-card {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+
+        .notificare-card.necita {
+            border-left: 5px solid #f00;
+        }
+
+        .notificare-card.citita {
+            border-left: 5px solid #0f0;
+        }
+
+    .notificare-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .notificare-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .notificare-body {
+        margin-top: 0.5rem;
+    }
+
+    .notificare-actions {
+        margin-top: 1rem;
+        display: flex;
+        gap: 0.5rem;
+    }
+
+        .notificare-actions button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+</style>

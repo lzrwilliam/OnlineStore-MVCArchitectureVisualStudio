@@ -1,0 +1,177 @@
+﻿/* stiluri pt detalii produse */
+.product-details {
+    margin-top: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.product-header h1 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 28px;
+}
+
+.img-fluid {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* pt produse detalii si specs */
+.product-details h3 {
+    color: #007bff;
+    font-size: 22px;
+    margin-top: 20px;
+}
+
+.product-details p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.btn {
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+/* tabel atribute dinamice */
+.atribute-dinamice {
+    margin-top: 20px;
+}
+
+    .atribute-dinamice h4 {
+        color: #007bff;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+.table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+    .table th,
+    .table td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+/* partea de review*/
+.review-section h4 {
+    color: #007bff;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.review {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+    .review h5 {
+        color: #007bff;
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .review p {
+        font-size: 16px;
+        color: #666;
+    }
+
+/* stele rating */
+.rating {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+}
+
+    .rating .star {
+        color: #ffda00;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+        .rating .star:hover,
+        .rating .star:hover ~ .star,
+        .rating input:checked ~ .star {
+            color: #ffc700;
+        }
+
+    .rating input {
+        display: none;
+    }
+
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .col-md-6 {
+        width: 100%;
+    }
+}
+
+.stock-info {
+    display: block; 
+    font-size: 14px; 
+    color: #555; 
+    margin-top: 5px; 
+}
+
+.btn-modify {
+    background-color: #ffc107; 
+    border-color: #ffc107; 
+    color: #333; 
+    transition: background-color 0.3s ease;
+}
+
+    .btn-modify:hover {
+        background-color: #e0a800; 
+        border-color: #daa000;
+    }
+
+    .btn-modify i.fa-cog {
+        margin-right: 5px; /* spatiu dinte text si iconita rotita de la modifica*/
+    }
+
+.btn-danger i.fa-trash {
+    margin-right: 5px; 
+}

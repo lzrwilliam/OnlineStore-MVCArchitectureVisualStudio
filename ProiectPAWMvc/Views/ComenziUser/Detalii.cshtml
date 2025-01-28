@@ -1,0 +1,28 @@
+﻿@model ProiectPAWMvc.Models.Comanda
+
+<h2>Detalii Comandă</h2>
+
+<h3>Data Comanda: @Model.DataComanda.ToString("dd/MM/yyyy")</h3>
+<h3>Total Comanda: @Model.TotalComanda.ToString("C")</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Produs</th>
+            <th>Cantitate</th>
+            <th>Pret Unitate</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DetaliiComenzi)
+        {
+            <tr>
+                <td>@item.NumeProdus</td>
+                <td>@item.Cantitate</td>
+                <td>@item.PretUnitate.ToString("C")</td>
+                <td>@((item.PretUnitate * item.Cantitate).ToString("C", new System.Globalization.CultureInfo("en-US")))</td>
+            </tr>
+        }
+    </tbody>
+</table>

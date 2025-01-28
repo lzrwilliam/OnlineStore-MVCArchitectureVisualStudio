@@ -1,0 +1,141 @@
+﻿@model ProiectPAW.wwwroot.Models.Produs
+
+@{
+    ViewData["Title"] = "Adaugă Produs";
+}
+
+
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="AdaugaProdus" method="post" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label asp-for="Nume" class="control-label"></label>
+        <input asp-for="Nume" class="form-control" />
+        <span asp-validation-for="Nume" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Descriere" class="control-label"></label>
+        <input asp-for="Descriere" class="form-control" />
+        <span asp-validation-for="Descriere" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Pret" class="control-label"></label>
+        <input asp-for="Pret" class="form-control" />
+        <span asp-validation-for="Pret" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Stoc" class="control-label"></label>
+        <input asp-for="Stoc" class="form-control" />
+        <span asp-validation-for="Stoc" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Brand" class="control-label"></label>
+        <input asp-for="Brand" class="form-control" />
+        <span asp-validation-for="Brand" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Poza" class="control-label"></label>
+        <input type="file" name="Poza" class="form-control" onchange="readURL(this);" />
+        <img id="imagePreview" src="#" alt="your image" style="display:none; max-width: 200px; max-height: 200px;" />
+        <span asp-validation-for="Poza" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CategorieID" class="control-label">Categorie</label>
+        <select asp-for="CategorieID" class="form-control" asp-items="ViewBag.Categorii" id="CategorieID">
+            <option value="">Selectează o categorie</option>
+        </select>
+        <span asp-validation-for="CategorieID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SubcategorieID" class="control-label">Subcategorie</label>
+        <select asp-for="SubcategorieID" class="form-control" id="SubcategorieID">
+            <option value="">Selectează o subcategorie</option>
+        </select>
+        <span asp-validation-for="SubcategorieID" class="text-danger"></span>
+    </div>
+
+    <div id="atribute-dinamice"></div>
+    <br />
+    <br />
+
+    <div class="form-group">
+        <input type="submit" value="Adaugă" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#CategorieID').change(function () {
+                var categorieId = $(this).val();
+                $.get('@Url.Action("GetSubcategorii", "Produs")', { categorieId: categorieId }, function (data) {
+                    var subcategorieSelect = $('#SubcategorieID');
+                    subcategorieSelect.empty();
+                    subcategorieSelect.append('<option value="">Selectează o subcategorie</option>');
+                    $.each(data, function (index, item) {
+                        subcategorieSelect.append($('<option>', { value: item.id, text: item.nume }));
+                    });
+                });
+
+                // incarcam atributele specifice categoriei
+                loadAtributes(categorieId, null);
+            });
+
+            $('#SubcategorieID').change(function () {
+                var subcategorieId = $(this).val();
+                var categorieId = $('#CategorieID').val();
+                // incarcam atributele specifice subcategoriei
+                loadAtributes(categorieId, subcategorieId);
+            });
+
+            function loadAtributes(categorieId, subcategorieId) {
+                $.get('@Url.Action("GetAtributeDinamice", "Produs")', { categorieId: categorieId, subcategorieId: subcategorieId }, function (data) {
+                    $('#atribute-dinamice').html(data);
+                });
+            }
+        });
+        $('form').submit(function (e) {
+            var allFieldsFilled = true;
+
+            // verificare input-uri generate dinamic
+            $('#atribute-dinamice input').each(function () {
+                if ($(this).val() === "") {
+                    allFieldsFilled = false;
+                }
+            });
+
+            if (!allFieldsFilled) {
+                alert('Te rog completează toate atributele.');
+                e.preventDefault(); 
+            }
+
+            if ($('#CategorieID').val() === "" || $('#SubcategorieID').val() === "") {
+                alert('Selectează și o categorie și o subcategorie.');
+                e.preventDefault(); // prevenim trimiterea formularului
+            }
+        });
+
+
+        function readURL(input) { // dam preview la imaginea pe care user o alege sa o incarce
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imagePreview').attr('src', e.target.result);
+                    $('#imagePreview').css('display', 'block'); // actualizeaza pt a se afisa imaginea
+                }
+
+                reader.readAsDataURL(input.files[0]); // convertim imaginea pentru a o afisa
+            } else {
+                $('#imagePreview').css('display', 'none'); // Ascunde imaginea daca nu este selectat niciun fisier
+            }
+        }
+    </script>
+}

@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Html
+@using ProiectPAW.wwwroot.Models
+@model dynamic
+
+@if (Model != null)
+{
+    // Atributele categoriei
+    if (Model.CategorieAtribute != null)
+    {
+        foreach (var atribut in Model.CategorieAtribute)
+        {
+            <div class="form-group">
+                <label>@atribut.Nume</label>
+                @RenderInputForAttribute(atribut)
+            </div>
+        }
+    }
+
+    // Atributele subcategoriei
+    if (Model.SubcategorieAtribute != null)
+    {
+        foreach (var atribut in Model.SubcategorieAtribute)
+        {
+            <div class="form-group">
+                <label>@atribut.Nume</label>
+                @RenderInputForAttribute(atribut)
+            </div>
+        }
+    }
+}
+
+@functions {
+    private IHtmlContent RenderInputForAttribute(AtributCategorie atribut)
+    {
+        switch (atribut.Tip)
+        {
+            case "text":
+                return new HtmlString($"<input type='text' name='Atribut_{atribut.ID}' class='form-control' />");
+            case "number":
+                return new HtmlString($"<input type='number' name='Atribut_{atribut.ID}' class='form-control' />");
+            case "boolean":
+                return new HtmlString($@"
+                    <select name='Atribut_{atribut.ID}' class='form-control'>
+                        <option value='true'>DA</option>
+                        <option value='false'>NU</option>
+                    </select>");
+            default:
+                return new HtmlString($"<input type='text' name='Atribut_{atribut.ID}' class='form-control' />");
+        }
+    }
+}

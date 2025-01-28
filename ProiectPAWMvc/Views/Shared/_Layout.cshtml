@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Online Store</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/afisareproduse.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/paginaprodus.css" asp-append-version="true" />
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="~/images/logo2.webp" alt="ProjectPAW Logo" style="height: 50px;">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Acasa</a>
+                        </li>
+                        
+                    </ul>
+                    <div class="d-flex justify-content-center flex-grow-1 search-bar-container">
+                        <form class="d-flex search-bar" asp-controller="Search" asp-action="Index" method="get">
+                            <input class="form-control me-2 search-input" type="search" placeholder="Caută produse" aria-label="Search" name="query">
+                            <button class="btn btn-outline-success search-button" type="submit">Search</button>
+                        </form>
+                    </div>
+                    <ul class="navbar-nav">
+                       
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                           
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="CosCumparaturi" asp-action="Index">
+                                    <i class="fa fa-shopping-cart"></i> Cos
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Notificari" asp-action="Index" id="notificari-bell">
+                                    <i class="fa fa-bell"></i>
+                                    @if (ViewData["NotificariNecitite"] is int notificariNecitite && notificariNecitite > 0)
+                                    {
+                                        <span class="badge bg-danger">@notificariNecitite</span>
+                                    }
+                                </a>
+                            </li>
+                        }
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                @if (User?.Identity?.IsAuthenticated == true)
+                                {
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Favorite" asp-action="Index">Produse favorite</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="ComenziUser" asp-action="Index">Comenzile Mele</a></li>
+
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="CosCumparaturi" asp-action="Index">Coș de cumpărături</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Notificari" asp-action="Index">Notificări</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Authentication" asp-action="Logout">Logout</a></li>
+
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Authentication" asp-action="Login">Login</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Authentication" asp-action="Register">Register</a></li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-3">
+                @await Component.InvokeAsync("CategoryMenu")
+                @if (User?.Identity != null && User.IsInRole("Moderator"))
+                {
+                    <div class="moderator-menu">
+                        <h3>Acțiuni Moderator</h3>
+                        <div class="moderator-submenu">
+                            <li class="list-group-item"><a asp-controller="Produs" asp-action="AdaugaProdus">Adaugă Produs</a></li>
+                            <li class="list-group-item"><a asp-controller="Produs" asp-action="ListaProduse" asp-route-actionType="modifica">Modifica Produs</a></li>
+                            <li class="list-group-item"><a asp-controller="Produs" asp-action="ListaProduse" asp-route-actionType="sterge">Sterge Produs</a></li>
+                            <li class="list-group-item"><a asp-controller="Categorie" asp-action="Index" >Actiuni Categorii</a></li>
+
+                        </div>
+                    </div>
+                }
+            </aside>
+            <main class="col-9">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - Lazar William Patrick  & Stroescu Dragos <a asp-area="" asp-controller="Home" asp-action="Privacy"></a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            function updateNotificationCount() {
+                $.getJSON("@Url.Action("NumarNotificariNecitite", "Notificari")", function (data) {
+                    $('#notificari-bell').html(data > 0 ? `<i class="fa fa-bell"></i><span class="badge bg-danger">${data}</span>` : `<i class="fa fa-bell"></i>`);
+                });
+            }
+
+            updateNotificationCount();
+            setInterval(updateNotificationCount, 6000); // actualizeaza la fiecare 6 de secunde
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

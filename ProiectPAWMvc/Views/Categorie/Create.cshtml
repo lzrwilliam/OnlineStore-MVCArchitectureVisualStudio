@@ -1,0 +1,30 @@
+﻿@model ProiectPAW.wwwroot.Models.Categorie
+
+@{
+    ViewData["Title"] = "Adaugă Categorie";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Nume" class="control-label"></label>
+        <input asp-for="Nume" class="form-control" />
+        <span asp-validation-for="Nume" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ParentCategorieID" class="control-label">Categorie Părinte</label>
+        <select asp-for="ParentCategorieID" class="form-control" asp-items="ViewBag.CategoriiParinte">
+            <option value="">Nicio categorie părinte</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Salvează" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
